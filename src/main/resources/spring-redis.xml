@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+
+	<!-- redis连接工厂 -->
+
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<!-- redis服务器的IP -->
+		<property name="hostName" value="192.168.1.5"></property>
+		<!-- redis服务器的端口号 -->
+		<property name="port" value="6379"></property>
+
+
+	</bean>
+	<!-- 字符串序列化类 建议配置key的序列化 -->
+	<bean id="stringRedisSerializer"
+		class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+	<!--jackson的序列化。建议配置value的序列化 -->
+	<bean id="genericJackson2JsonRedisSerializer"
+		class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"></bean>
+
+	<!-- jdk的序列化 默认 -->
+	<!-- <bean id="jdkSerializationRedisSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"></bean> -->
+
+	<!-- json序列化 -->
+	<!-- <bean id="jackson2JsonRedisSerializer" class="org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer"> 
+		<constructor-arg value="java.lang.Object"> </constructor-arg> </bean> -->
+	<!-- -->
+	<!-- redis模板类 -->
+	<bean id="redisTemplate"
+		class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory"
+			ref="jedisConnectionFactory"></property>
+		<property name="keySerializer" ref="stringRedisSerializer"></property>
+		<property name="valueSerializer"
+			ref="genericJackson2JsonRedisSerializer"></property>
+	</bean>
+</beans>
